@@ -179,11 +179,10 @@ export const CloseTradesTable = ({
                         {/* Type */}
                         <div className="hidden md:block md:col-span-2 text-center">
                             <p
-                                className={`bg-${
-                                    trade.positionType === "sell"
-                                        ? "sell"
-                                        : "buy"
-                                } 
+                                className={`bg-${trade.positionType === "sell"
+                                    ? "sell"
+                                    : "buy"
+                                    } 
                                          w-fit px-2 py-1 rounded-md text-white text-xs mx-auto`}>
                                 {trade.positionType}
                             </p>
@@ -270,10 +269,10 @@ export const CloseTradesTable = ({
                                     (
                                     {startCapital && +startCapital !== 0
                                         ? `${Math.round(
-                                              (Number(trade.deposit) /
-                                                  Number(startCapital)) *
-                                                  100
-                                          )}%`
+                                            (Number(trade.deposit) /
+                                                Number(startCapital)) *
+                                            100
+                                        )}%`
                                         : "no capital"}
                                     )
                                 </span>
@@ -282,11 +281,10 @@ export const CloseTradesTable = ({
 
                         {/* Result */}
                         <div
-                            className={`col-span-1 md:col-span-2 text-center ${
-                                Number(trade.result) >= 0
-                                    ? "text-buy"
-                                    : "text-sell"
-                            }`}>
+                            className={`col-span-1 md:col-span-2 text-center ${Number(trade.result) >= 0
+                                ? "text-buy"
+                                : "text-sell"
+                                }`}>
                             <div className="flex gap-1 items-center justify-center">
                                 {Number(trade.result) >= 0 ? (
                                     <FaArrowTrendUp className="text-sm" />
@@ -333,11 +331,10 @@ export const CloseTradesTable = ({
                                 {[...Array(5)].map((_, i) => (
                                     <MdStar
                                         key={i}
-                                        className={`text-sm ${
-                                            trade.rating && trade.rating > i
-                                                ? "text-yellow-500"
-                                                : "text-neutral-400"
-                                        }`}
+                                        className={`text-sm ${trade.rating && trade.rating > i
+                                            ? "text-yellow-500"
+                                            : "text-neutral-400"
+                                            }`}
                                     />
                                 ))}
                             </div>
@@ -395,7 +392,7 @@ export const CloseTradesTable = ({
             <div className="sticky bottom-0 right-0 left-0 bg-white w-full border-t p-4 mt-auto">
                 <div className="flex justify-between text-lg font-medium">
                     <span>Total</span>
-                    <span>{total.toLocaleString("de-DE")}</span>
+                    <span>{total.toLocaleString("en-US")}</span>
                 </div>
             </div>
 
@@ -430,8 +427,8 @@ export const CloseTradesTable = ({
                                     (rule) => rule.id
                                 ) || []
                             }
-                            onOpenRuleToggle={() => {}}
-                            onCloseRuleToggle={() => {}}
+                            onOpenRuleToggle={() => { }}
+                            onCloseRuleToggle={() => { }}
                         />
                     )}
                 </DialogContent>
@@ -441,9 +438,8 @@ export const CloseTradesTable = ({
             <DeleteTradeDialog
                 isOpen={deleteDialogOpen}
                 onOpenChange={setDeleteDialogOpen}
-                message={`Do you want to delete this trade${
-                    tradeToDelete ? ` "${tradeToDelete.symbolName}"` : ""
-                }?`}
+                message={`Do you want to delete this trade${tradeToDelete ? ` "${tradeToDelete.symbolName}"` : ""
+                    }?`}
                 onConfirm={async () => {
                     if (!tradeToDelete) return;
                     if (tradeToDelete.closeDate && tradeToDelete.result) {

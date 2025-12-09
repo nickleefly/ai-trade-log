@@ -169,6 +169,7 @@ export default function Filtering({
                 <div className="flex max-md:flex-col gap-2 md:gap-4 max-md:w-full">
                     <div className="flex items-center">
                         <Tabs
+                            id="trade-tabs"
                             value={activeTab === "openTrades" ? "open-trades" : "close-trades"}
                             onValueChange={(value) =>
                                 dispatch(setActiveTab(value === "open-trades" ? "openTrades" : "closedTrades"))
