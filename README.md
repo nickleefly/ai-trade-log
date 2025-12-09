@@ -133,5 +133,3 @@ Save and revisit AI reports at any time.
 - **Database optimization** — Indexed queries for speed with large datasets.
 
 ---
-
-🚀 Try it now: [Visit TradeJournal](https://tradejournal.one)
