@@ -48,7 +48,7 @@ export async function saveJournalEntry(date: string, content: Record<string, unk
             });
         }
 
-        revalidatePath("/private/journal");
+        revalidatePath("/journal");
         return { success: true };
     } catch (error) {
         console.error("Error saving journal entry:", error);

@@ -62,7 +62,7 @@ export function JournalSidebar({ dates }: JournalSidebarProps) {
     const handleDateSelect = (date: Date | undefined) => {
         if (date) {
             const formattedDate = dayjs(date).format("YYYY/MM/DD");
-            router.push(`/private/journal/${formattedDate}`);
+            router.push(`/journal/${formattedDate}`);
             setIsCalendarOpen(false);
         }
     };
@@ -112,11 +112,11 @@ export function JournalSidebar({ dates }: JournalSidebarProps) {
                                                     <div className="ml-4 mt-1 space-y-0.5 border-l border-zinc-200 pl-2">
                                                         {tree[year][month].map((date) => {
                                                             const d = dayjs(date);
-                                                            const isActive = pathname === `/private/journal/${d.format("YYYY/MM/DD")}`;
+                                                            const isActive = pathname === `/journal/${d.format("YYYY/MM/DD")}`;
                                                             return (
                                                                 <Link
                                                                     key={date}
-                                                                    href={`/private/journal/${d.format("YYYY/MM/DD")}`}
+                                                                    href={`/journal/${d.format("YYYY/MM/DD")}`}
                                                                     className={cn(
                                                                         "flex items-center w-full px-2 py-1.5 text-sm rounded-md transition-colors",
                                                                         isActive
@@ -145,7 +145,7 @@ export function JournalSidebar({ dates }: JournalSidebarProps) {
                     )}
                 </div>
             </div>
-            
+
             <div className="p-4 border-t border-zinc-200">
                 <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                     <PopoverTrigger asChild>

@@ -26,7 +26,7 @@ export default function JournalPage() {
                 Document your trading journey, write down your thoughts, and review your performance.
             </p>
             <Button asChild>
-                <Link href={`/private/journal/${today}`}>
+                <Link href={`/journal/${today}`}>
                     Write Today&apos;s Entry
                 </Link>
             </Button>

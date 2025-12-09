@@ -27,7 +27,7 @@ export default function MobileNavigation() {
                             height={42}
                         />
                         <p className="font-semibold text-[1.5rem] ml-2">
-                            Journal
+                            Log
                         </p>
 
                         <p className="font-semibold text-[1.5rem]">&</p>
@@ -38,49 +38,49 @@ export default function MobileNavigation() {
                 <div
                     className="flex gap-1 mobile-nav-link items-center"
                     onClick={() => setIsOpen(false)}>
-                    <Link href="/private/calendar" className="w-full py-4">
+                    <Link href="/calendar" className="w-full py-4">
                         <p className="leading-none text-[1.5rem]">Calendar</p>
                     </Link>
                 </div>
                 <div
                     className="flex gap-1 mobile-nav-link items-center"
                     onClick={() => setIsOpen(false)}>
-                    <Link href="/private/history" className="w-full py-4">
+                    <Link href="/history" className="w-full py-4">
                         <p className="leading-none text-[1.5rem]">History</p>
                     </Link>
                 </div>
                 <div
                     className="flex gap-1 mobile-nav-link items-center"
                     onClick={() => setIsOpen(false)}>
-                    <Link href="/private/statistics" className="w-full py-4">
+                    <Link href="/statistics" className="w-full py-4">
                         <p className="leading-none text-[1.5rem]">Statistics</p>
                     </Link>
                 </div>
                 <div
                     className="flex gap-1 mobile-nav-link items-center"
                     onClick={() => setIsOpen(false)}>
-                    <Link href="/private/strategies" className="w-full py-4">
+                    <Link href="/strategies" className="w-full py-4">
                         <p className="leading-none text-[1.5rem]">Strategies</p>
                     </Link>
                 </div>
                 <div
                     className="flex gap-1 mobile-nav-link items-center"
                     onClick={() => setIsOpen(false)}>
-                    <Link href="/private/journal" className="w-full py-4">
+                    <Link href="/journal" className="w-full py-4">
                         <p className="leading-none text-[1.5rem]">Journal</p>
                     </Link>
                 </div>
                 <div
                     className="flex gap-1 mobile-nav-link items-center"
                     onClick={() => setIsOpen(false)}>
-                    <Link href="/private/tradeAI" className="w-full py-4">
+                    <Link href="/tradeAI" className="w-full py-4">
                         <p className="leading-none text-[1.5rem]">TradeAI</p>
                     </Link>
                 </div>
                 <div
                     className="flex gap-1 mobile-nav-link items-center"
                     onClick={() => setIsOpen(false)}>
-                    <Link href="/private/tokens" className="w-full py-4">
+                    <Link href="/tokens" className="w-full py-4">
                         <p className="leading-none text-[1.5rem]">Tokens</p>
                     </Link>
                 </div>
@@ -88,7 +88,7 @@ export default function MobileNavigation() {
                     className="flex gap-1 mobile-nav-link items-center"
                     onClick={() => setIsOpen(false)}>
                     <Link
-                        href="/private/reports-history"
+                        href="/reports-history"
                         className="w-full py-4">
                         <p className="leading-none text-[1.5rem]">Archive</p>
                     </Link>

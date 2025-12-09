@@ -143,7 +143,7 @@ export default function Page() {
                         View your saved AI analysis reports. Pick up where you left off or review past insights.
                     </p>
                 </div>
-                
+
                 <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
                     <CustomButton
                         isBlack={false}
@@ -179,7 +179,7 @@ export default function Page() {
                 {paginatedReports ? (
                     paginatedReports.map((report) => (
                         <Link
-                            href={`/private/reports-history/${report.reportId}`}
+                            href={`/reports-history/${report.reportId}`}
                             key={report.reportId}
                             className="group relative flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-md border border-zinc-200 overflow-hidden transition-all duration-200"
                         >
@@ -236,7 +236,7 @@ export default function Page() {
                                         </p>
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex items-center gap-2.5 text-sm text-zinc-600 bg-zinc-50 px-3 py-2.5 rounded-lg border border-zinc-100">
                                     <MessageSquare size={16} className="text-zinc-400" />
                                     <span className="font-medium">{report.numberOfMessages}</span>
@@ -250,7 +250,7 @@ export default function Page() {
                         <CustomLoading />
                     </div>
                 )}
-                
+
                 {paginatedReports?.length === 0 && (
                     <div className="col-span-full flex flex-col items-center justify-center min-h-[400px] text-zinc-500 bg-zinc-50/50 rounded-3xl border border-dashed border-zinc-200">
                         <div className="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center mb-4">
@@ -268,11 +268,10 @@ export default function Page() {
                     <button
                         onClick={goToPreviousPage}
                         disabled={currentPage === 1}
-                        className={`flex gap-2 items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                            currentPage === 1
+                        className={`flex gap-2 items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors ${currentPage === 1
                                 ? "text-zinc-300 cursor-not-allowed"
                                 : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-                        }`}>
+                            }`}>
                         <ChevronLeft size={16} />
                         Previous
                     </button>
@@ -282,11 +281,10 @@ export default function Page() {
                     <button
                         onClick={goToNextPage}
                         disabled={currentPage === totalPages}
-                        className={`flex gap-2 items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                            currentPage === totalPages
+                        className={`flex gap-2 items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors ${currentPage === totalPages
                                 ? "text-zinc-300 cursor-not-allowed"
                                 : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-                        }`}>
+                            }`}>
                         Next
                         <ChevronRight size={16} />
                     </button>

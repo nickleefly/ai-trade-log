@@ -56,7 +56,7 @@ export default function StrategiesPage() {
                             To create and manage trading strategies, you need to complete your profile by adding your starting capital.
                         </p>
                     </div>
-                    <Link href="/private/statistics">
+                    <Link href="/statistics">
                         <CustomButton isBlack={true}>
                             Go to Statistics & Add Capital
                         </CustomButton>

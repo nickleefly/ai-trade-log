@@ -39,7 +39,7 @@ export default function AIReportControls() {
             return;
         }
 
-        router.push("/private/tradeAI/report");
+        router.push("/tradeAI/report");
     };
 
     return (
@@ -53,7 +53,7 @@ export default function AIReportControls() {
                 </div>
             </div>
 
-            <Link href="/private/reports-history" className="cursor-pointer">
+            <Link href="/reports-history" className="cursor-pointer">
                 <div className="relative group inline-block">
                     <div className="flex gap-2 mb-2 text-[#3D3929]">
                         Report Archive <MoveUpRight className="w-[1rem]" />

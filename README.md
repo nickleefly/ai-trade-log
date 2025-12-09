@@ -1,4 +1,4 @@
-## Important: Let’s make this journal better together! I want to create a product that works well for everyone. If there’s something you don’t like or a feature you’re missing, please share your thoughts in the Discussions section of this repository or in the Feedback section on tradejournal.one (after logging in, go to Ecosystem → Feedback).
+## Important: Let’s make this journal better together! I want to create a product that works well for everyone. If there’s something you don’t like or a feature you’re missing, please share your thoughts in the Discussions section of this repository or in the Feedback section
 
 # ⭐️ Support the project
 This project is a personal passion, developed in my free time. If you find it useful, please give it a ⭐️. Your support means a lot and motivates me to keep improving the bot.

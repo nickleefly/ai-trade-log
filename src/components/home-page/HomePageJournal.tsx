@@ -7,21 +7,21 @@ const HomePageJournal = () => {
         <section className="w-full py-24 px-4 md:px-8 lg:px-16 bg-zinc-50">
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-                    
+
                     {/* Text Content */}
                     <div className="flex-1 space-y-8">
                         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-orange-600 text-sm font-medium">
                             <Book className="w-4 h-4" />
                             <span>New Feature</span>
                         </div>
-                        
+
                         <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 leading-tight">
                             Master your psychology with <span className="text-orange-500">Daily Journaling</span>
                         </h2>
-                        
+
                         <p className="text-lg text-zinc-600 leading-relaxed">
-                            The difference between a gambler and a trader is documentation. 
-                            Keep track of your thoughts, emotions, and market observations to identify 
+                            The difference between a gambler and a trader is documentation.
+                            Keep track of your thoughts, emotions, and market observations to identify
                             patterns in your behavior and improve your decision-making.
                         </p>
 
@@ -40,7 +40,7 @@ const HomePageJournal = () => {
 
                         <div className="pt-4">
                             <CustomButton isBlack>
-                                <Link href="/private/journal">
+                                <Link href="/journal">
                                     Start Journaling
                                 </Link>
                             </CustomButton>
@@ -80,11 +80,11 @@ const HomePageJournal = () => {
 
                                     <div className="space-y-2">
                                         <p className="text-zinc-600">
-                                            Market opened with a gap up. Feeling a bit FOMO but sticking to the plan. 
+                                            Market opened with a gap up. Feeling a bit FOMO but sticking to the plan.
                                             Noticed strong volume on the tech sector.
                                         </p>
                                         <p className="text-zinc-600">
-                                            <strong>10:30 AM:</strong> Took a long position on SPY. Setup looked clean, 
+                                            <strong>10:30 AM:</strong> Took a long position on SPY. Setup looked clean,
                                             risk/reward is 1:3.
                                         </p>
                                     </div>
@@ -102,7 +102,7 @@ const HomePageJournal = () => {
                                 </div>
                             </div>
                         </div>
-                        
+
                         {/* Decorative Elements */}
                         <div className="absolute -z-10 top-1/2 right-1/2 w-64 h-64 bg-orange-200/30 rounded-full blur-3xl" />
                         <div className="absolute -z-10 bottom-0 right-0 w-64 h-64 bg-blue-200/30 rounded-full blur-3xl" />

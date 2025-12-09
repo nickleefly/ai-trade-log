@@ -41,7 +41,7 @@ export default function BuyTokensCards() {
         */
     };
     return (
-        <div className="md:min-h-[30rem] px-2 md:px-0 2xl:w-2/3 flex flex-col gap-4 lg:flex-row md:gap-0">
+        <div className="md:min-h-[30rem] px-2 md:px-0 w-full flex flex-col gap-4 lg:flex-row lg:gap-4">
             {/* Payment Disabled Notice */}
             <div className="w-full mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <div className="flex items-center">
@@ -60,7 +60,7 @@ export default function BuyTokensCards() {
                     </div>
                 </div>
             </div>
-            <div className="border border-zinc-300 md:h-[38rem] flex-1 flex flex-col gap-5 rounded-xl lg:max-w-[400px] px-6 pt-6 pb-10 md:pb-6 mt-[1rem]">
+            <div className="border border-zinc-300 h-auto w-full lg:w-1/3 flex flex-col gap-5 rounded-xl px-6 pt-6 pb-10 md:pb-6">
                 <div className="flex flex-col gap-1">
                     <p className="flex items-center text-2xl">Stripe</p>
                     <div className="flex gap-1 items-baseline relative ml-4 mt-2">
@@ -118,7 +118,7 @@ export default function BuyTokensCards() {
                     </div>
                 </div>
             </div>
-            <div className="border border-claude bg-claudeBackground md:h-[40rem] flex-1 rounded-xl lg:max-w-[400px] flex flex-col gap-6 px-6 pt-6 pb-10 md:pb-6">
+            <div className="border border-claude bg-claudeBackground h-auto w-full lg:w-1/3 rounded-xl flex flex-col gap-6 px-6 pt-6 pb-10 md:pb-6">
                 <div className="flex flex-col gap-2">
                     <div className="flex gap-2">
                         <p className="flex items-center text-2xl">Crypto</p>
@@ -192,7 +192,7 @@ export default function BuyTokensCards() {
                     </div>
                 </div>
             </div>
-            <div className="border border-zinc-300 md:h-[38rem] flex-1 flex flex-col gap-6 rounded-xl lg:max-w-[400px] px-6 pt-6 pb-10 md:pb-6 mt-[1rem]">
+            <div className="border border-zinc-300 h-auto w-full lg:w-1/3 flex flex-col gap-6 rounded-xl px-6 pt-6 pb-10 md:pb-6">
                 <div className="flex flex-col gap-1">
                     <p className="flex items-center text-2xl">Stripe</p>
                     <div className="flex gap-1 items-baseline relative ml-4 mt-2">

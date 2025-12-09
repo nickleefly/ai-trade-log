@@ -30,9 +30,7 @@ export default async function Home() {
                 where: eq(UserTable.id, userId),
             });
         }
-
-        if (!user?.onboardingCompleted) redirect("/private/intro");
-        if (user?.onboardingCompleted) redirect("/private/calendar");
+        // No redirect - logged in users can stay on home page and navigate manually
     }
     return (
         <Suspense

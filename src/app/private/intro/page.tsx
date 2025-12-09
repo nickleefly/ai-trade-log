@@ -119,7 +119,7 @@ export default function Page() {
                     {!isLast ? (
                         <Button onClick={() => setStep((s) => Math.min(total - 1, s + 1))}>Next</Button>
                     ) : (
-                        <form action={async () => { await completeOnboarding(); redirect("/private/calendar") }}>
+                        <form action={async () => { await completeOnboarding(); redirect("/calendar") }}>
                             <input type="hidden" name="redirectTo" />
                             <StartButton />
                         </form>

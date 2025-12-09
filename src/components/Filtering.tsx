@@ -130,7 +130,7 @@ export default function Filtering({
         dispatch(setFilteredTrades(filtered));
     };
     return (
-        <div className="px-3 md:px-6 flex max-md:flex-col max-md:gap-3 items-center justify-between py-3 md:py-1 2xlpy-2 border-b border-zinc-200 max-md:overflow-hidden">
+        <div className="flex max-md:flex-col max-md:gap-3 items-center justify-between max-md:overflow-hidden">
             <div
                 className={`flex gap-2 w-full ${isStatisticsPage ? "w-full" : "md:w-1/2"
                     } md:flex-wrap overflow-auto p-1`}>

@@ -57,8 +57,8 @@ export async function checkoutCredits(transaction: CheckoutTransactionParams) {
             buyerId: transaction.buyerId,
         },
         mode: "payment",
-        success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/private/tokens`,
-        cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/private/tokens`,
+        success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/tokens`,
+        cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/tokens`,
     });
     redirect(session.url!);
     */

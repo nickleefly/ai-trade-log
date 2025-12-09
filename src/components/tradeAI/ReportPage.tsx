@@ -60,11 +60,10 @@ export default function ReportPage({
             <div className="flex flex-col justify-between h-full pb-2">
                 <div className="relative flex max-md:flex-col md:items-center justify-between px-4 py-4 md:px-8">
                     <Link
-                        href={`/private/${
-                            goBackButton === "Archive"
+                        href={`/${goBackButton === "Archive"
                                 ? "reports-history"
                                 : "tradeAI"
-                        }`}
+                            }`}
                         className="relative group hidden md:inline-block cursor-pointer">
                         <div className="flex items-center gap-2 mb-2 text-[#3D3929]">
                             <ArrowUpLeft size={16} />

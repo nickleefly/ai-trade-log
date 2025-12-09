@@ -8,7 +8,7 @@ import { StatsGridPageTwo } from "@/components/StatsGridPageTwo";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { CustomButton } from "../CustomButton";
 import { StatsGridPageOne } from "@/components/StatsGridPageOne";
-import { SignUpButton } from "@clerk/nextjs";
+import { SignUpButton, SignedIn, SignedOut, SignOutButton } from "@clerk/nextjs";
 import HomePageStart from "./HomePageStart";
 import HomePageReviews from "./HomePageReviews";
 import HomePageCalendar from "./HomePageCalendar";
@@ -145,27 +145,34 @@ export default function HomePage() {
                     </div>
                     <div className="hidden md:flex justify-center md:mr-[35px]">
                         <div id="nav-buttons" className="flex gap-2 lg:gap-4">
-                            <Link href="/sign-in">
+                            <Link href="/calendar">
                                 <div className="nav-link">Calendar</div>
                             </Link>
-                            {/* <Link href="/sign-in">
-                                <div className="nav-link">
-                                    History
-                                </div>
-                            </Link> */}
-                            <Link href="/sign-in">
+                            <Link href="/history">
+                                <div className="nav-link">History</div>
+                            </Link>
+                            <Link href="/statistics">
                                 <div className="nav-link">Statistics</div>
                             </Link>
-                            <Link href="/sign-in">
+                            <Link href="/tradeAI">
                                 <div className="nav-link">TradeAI</div>
                             </Link>
                         </div>
                     </div>
-                    <CustomButton isBlack={false}>
-                        <SignUpButton>
-                            <span className="max-md:text-[.75rem]">Log in</span>
-                        </SignUpButton>
-                    </CustomButton>
+                    <SignedOut>
+                        <CustomButton isBlack={false}>
+                            <SignUpButton>
+                                <span className="max-md:text-[.75rem]">Log in</span>
+                            </SignUpButton>
+                        </CustomButton>
+                    </SignedOut>
+                    <SignedIn>
+                        <CustomButton isBlack={false}>
+                            <SignOutButton>
+                                <span className="max-md:text-[.75rem]">Log out</span>
+                            </SignOutButton>
+                        </CustomButton>
+                    </SignedIn>
                 </nav>
             </header>
             <HomePageStart />
@@ -318,8 +325,8 @@ export default function HomePage() {
                                 ref={buttonRef}
                                 onClick={handleSwitch}
                                 className={`${isSwitchChartsActive
-                                        ? "switch-button active"
-                                        : "switch-button"
+                                    ? "switch-button active"
+                                    : "switch-button"
                                     }`}
                             />
                             <p>Summary</p>
