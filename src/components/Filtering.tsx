@@ -29,7 +29,7 @@ export default function Filtering({
     const [instrumentLabels, setInstrumentLabels] = useState<string[]>([]);
     const [removedItems, setRemovedItems] = useState<string[]>([]);
 
-    const [dateRange, setDateRange] = useState<DateRange | null>(null);
+    const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined);
 
     const trades = useAppSelector((state) => state.tradeRecords.listOfTrades);
     const sortBy = useAppSelector((state) => state.history.sortBy);
@@ -37,6 +37,43 @@ export default function Filtering({
     const activeTab = useAppSelector((state) => state.history.activeTab);
 
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (!timeframe) return;
+
+        const now = new Date();
+
+        const todayCommon = {
+            from: new Date(now.getFullYear(), now.getMonth(), now.getDate()),
+            to: new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999),
+        };
+
+        switch (timeframe) {
+            case "today":
+                setDateRange(todayCommon);
+                break;
+            case "thisWeek": {
+                const oneWeekAgo = new Date();
+                oneWeekAgo.setDate(now.getDate() - 7);
+                setDateRange({
+                    from: oneWeekAgo,
+                    to: now,
+                });
+                break;
+            }
+            case "thisMonth": {
+                const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+                setDateRange({
+                    from: firstDay,
+                    to: now,
+                });
+                break;
+            }
+            case "allHistory":
+                setDateRange(undefined);
+                break;
+        }
+    }, [timeframe]);
 
     useEffect(() => {
         if (trades) {
@@ -54,7 +91,7 @@ export default function Filtering({
     useEffect(() => {
         if (!trades || trades.length === 0) return;
 
-        if (dateRange === null) {
+        if (!dateRange || !dateRange.from) {
             if (trades) {
                 setInstrumentLabels([
                     ...new Set(
@@ -70,14 +107,32 @@ export default function Filtering({
         }
 
         const filteredTrades = trades.filter((trade) => {
-            if (dateRange?.from === undefined || dateRange?.to === undefined || trade.closeDate === undefined)
-                return;
-            const closeDate = new Date(trade.closeDate);
+            if (!dateRange?.from || trade.closeDate === undefined)
+                return false;
 
-            return (
-                closeDate.getTime() >= dateRange.from.getTime() &&
-                closeDate.getTime() <= dateRange.to.getTime()
-            );
+            // 1. Get Trade Date as YYYY-MM-DD String (Local representation)
+            let tradeD = new Date(trade.closeDate);
+
+            // Fix: ISO strings (YYYY-MM-DD) are parsed as UTC by new Date(), often shifting to previous day locally.
+            // Check for strict YYYY-MM-DD format (no time)
+            if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(trade.closeDate)) {
+                const [y, m, d] = trade.closeDate.split('-').map(Number);
+                tradeD = new Date(y, m - 1, d);
+            }
+
+            const toDateStr = (d: Date) => {
+                return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            };
+
+            const tradeDateStr = toDateStr(tradeD);
+            const fromStr = toDateStr(dateRange.from);
+
+            if (dateRange.to) {
+                const toStr = toDateStr(dateRange.to);
+                return tradeDateStr >= fromStr && tradeDateStr <= toStr;
+            }
+
+            return tradeDateStr >= fromStr;
         });
 
         const newLabels = [
@@ -169,7 +224,7 @@ export default function Filtering({
                 <div className="flex max-md:flex-col gap-2 md:gap-4 max-md:w-full">
                     <div className="flex items-center">
                         <Tabs
-                            id="trade-tabs"
+                            suppressHydrationWarning
                             value={activeTab === "openTrades" ? "open-trades" : "close-trades"}
                             onValueChange={(value) =>
                                 dispatch(setActiveTab(value === "open-trades" ? "openTrades" : "closedTrades"))
@@ -181,7 +236,20 @@ export default function Filtering({
                         </Tabs>
                     </div>
                     <DatePickerWithRange
-                        setDateRangeForFiltering={setDateRange}
+                        // setDateRangeForFiltering={setDateRange}
+                        date={dateRange as DateRange | undefined}
+                        setDate={(newRange) => {
+                            if (typeof newRange === 'function') {
+                                setDateRange((prev) => {
+                                    const next = newRange(prev);
+                                    return next ?? undefined;
+                                });
+                            } else {
+                                setDateRange(newRange ?? undefined);
+                            }
+                            // Reset timeframe to custom if user manually picks dates
+                            if (timeframe) dispatch(setTimeframe(undefined));
+                        }}
                     />
                     <div className="flex items-center max-md:justify-between gap-4">
                         <Select

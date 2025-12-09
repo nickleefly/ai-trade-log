@@ -16,19 +16,19 @@ import {
 
 interface DatePickerWithRangeProps
     extends React.HTMLAttributes<HTMLDivElement> {
-    setDateRangeForFiltering: React.Dispatch<
-        React.SetStateAction<DateRange | null>
-    >;
+    date: DateRange | undefined;
+    setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
 }
 
 export function DatePickerWithRange({
     className,
-    setDateRangeForFiltering,
+    date,
+    setDate,
 }: DatePickerWithRangeProps) {
-    const [date, setDate] = React.useState<DateRange | undefined>({
-        from: undefined,
-        to: undefined,
-    });
+    // const [date, setDate] = React.useState<DateRange | undefined>({
+    //     from: undefined,
+    //     to: undefined,
+    // });
 
     return (
         <div className={cn("grid gap-2", className)}>
@@ -38,7 +38,7 @@ export function DatePickerWithRange({
                         id="date"
                         variant={"outline"}
                         className={cn(
-                            "w-full md:w-[200px] justify-start text-left font-normal",
+                            "w-full md:w-[270px] justify-start text-left font-normal",
                             !date && "text-muted-foreground"
                         )}>
                         <CalendarIcon />
@@ -62,10 +62,7 @@ export function DatePickerWithRange({
                         mode="range"
                         defaultMonth={date?.from}
                         selected={date}
-                        onSelect={(newRange) => {
-                            setDate(newRange);
-                            setDateRangeForFiltering(newRange ?? null);
-                        }}
+                        onSelect={setDate}
                         numberOfMonths={1}
                     />
                 </PopoverContent>

@@ -104,7 +104,7 @@ export default function NewRuleForDialog({
             </TableCell>
 
             <TableCell className="py-3">
-                <div 
+                <div
                     onClick={handleChangePriority}
                     className={`
                         inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium cursor-pointer transition-all select-none
@@ -112,11 +112,10 @@ export default function NewRuleForDialog({
                         hover:opacity-90 active:scale-95
                     `}
                 >
-                    <span className={`w-1.5 h-1.5 rounded-full ${
-                        rule.priority === 'high' ? 'bg-rose-500' : 
-                        rule.priority === 'medium' ? 'bg-amber-500' : 
-                        'bg-emerald-500'
-                    }`} />
+                    <span className={`w-1.5 h-1.5 rounded-full ${rule.priority === 'high' ? 'bg-rose-500' :
+                            rule.priority === 'medium' ? 'bg-amber-500' :
+                                'bg-emerald-500'
+                        }`} />
                     {rule.priority.charAt(0).toUpperCase() + rule.priority.slice(1)} Priority
                 </div>
             </TableCell>
