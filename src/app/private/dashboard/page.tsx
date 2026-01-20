@@ -153,6 +153,10 @@ function ZellaScoreGauge({ score }: { score: number }) {
 }
 
 import { useFilteredTrades } from "@/hooks/useFilteredTrades";
+import { WeeklySummary } from "@/components/dashboard/WeeklySummary";
+import { TradeTimeHeatmap } from "@/components/dashboard/TradeTimeHeatmap";
+import { DurationPerformanceChart } from "@/components/dashboard/DurationPerformanceChart";
+import { AdvancedDrawdownChart } from "@/components/dashboard/AdvancedDrawdownChart";
 
 export default function DashboardPage() {
     const tradeRecords = useFilteredTrades();
@@ -168,7 +172,7 @@ export default function DashboardPage() {
         return calculateMetrics(trades);
     }, [tradeRecords]);
 
-    // Generate equity curve data
+    // Generate equity curve data for the main chart
     const equityCurve = useMemo(() => {
         const closedTrades = [...tradeRecords]
             .filter((t: any) => !t.isActiveTrade && t.closeDate && t.result)
@@ -197,14 +201,14 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                {/* Main Grid */}
+                {/* Main Metrics Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    {/* Zella Score - Takes up left column */}
+                    {/* Zella Score */}
                     <div className="lg:col-span-1">
                         <ZellaScoreGauge score={metrics.zellaScore} />
                     </div>
 
-                    {/* Key Metrics - Takes up 3 columns */}
+                    {/* Key Metrics Grid */}
                     <div className="lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4">
                         <MetricCard
                             title="Net P&L"
@@ -266,63 +270,68 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                {/* Equity Curve */}
-                <div className="bg-white rounded-xl border shadow-sm p-4">
-                    <h3 className="text-lg font-semibold mb-4">Equity Curve</h3>
-                    {equityCurve.length > 0 ? (
-                        <Box sx={{ width: "100%", height: 300 }}>
-                            <LineChart
-                                dataset={equityCurve}
-                                xAxis={[
-                                    {
+                {/* Secondary Charts Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Main Equity Curve (2/3 width) */}
+                    <div className="lg:col-span-2 bg-white rounded-xl border shadow-sm p-4">
+                        <h3 className="text-lg font-semibold mb-4">Equity Curve</h3>
+                        {equityCurve.length > 0 ? (
+                            <Box sx={{ width: "100%", height: 300 }}>
+                                <LineChart
+                                    dataset={equityCurve}
+                                    xAxis={[{
                                         id: "Date",
                                         dataKey: "date",
                                         scaleType: "time",
                                         tickNumber: 6,
-                                        valueFormatter: (date) =>
-                                            new Intl.DateTimeFormat("en-US", {
-                                                month: "short",
-                                                day: "numeric",
-                                            }).format(date),
-                                    },
-                                ]}
-                                yAxis={[
-                                    {
+                                        valueFormatter: (date) => format(date, "MMM d"),
+                                    }]}
+                                    yAxis={[{
                                         colorMap: {
                                             type: "piecewise",
                                             thresholds: [0],
                                             colors: ["#ef4444", "#22c55e"],
                                         },
-                                    },
-                                ]}
-                                series={[
-                                    {
+                                    }]}
+                                    series={[{
                                         curve: "linear",
                                         id: "pnl",
                                         dataKey: "pnl",
                                         showMark: false,
                                         area: true,
                                         valueFormatter: (value) => formatCurrency(value || 0),
-                                    },
-                                ]}
-                                margin={{ left: 65, top: 25, right: 30, bottom: 25 }}
-                                grid={{ horizontal: true }}
-                                sx={{
-                                    "& .MuiAreaElement-series-pnl": {
-                                        opacity: 0.3,
-                                    },
-                                }}
-                            />
-                        </Box>
-                    ) : (
-                        <div className="h-64 flex items-center justify-center text-gray-400">
-                            <p>No closed trades to display</p>
-                        </div>
-                    )}
+                                    }]}
+                                    margin={{ left: 65, top: 25, right: 30, bottom: 25 }}
+                                    grid={{ horizontal: true }}
+                                    sx={{
+                                        "& .MuiAreaElement-series-pnl": { opacity: 0.3 },
+                                    }}
+                                />
+                            </Box>
+                        ) : (
+                            <div className="h-64 flex items-center justify-center text-gray-400">
+                                <p>No closed trades to display</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Weekly Summary (1/3 width) */}
+                    <div className="lg:col-span-1">
+                        <WeeklySummary trades={tradeRecords} />
+                    </div>
                 </div>
 
-                {/* Summary Stats Row */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {/* Analytics Row */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <TradeTimeHeatmap trades={tradeRecords} />
+                    <DurationPerformanceChart trades={tradeRecords} />
+                </div>
+
+                {/* Drawdown Analysis */}
+                <AdvancedDrawdownChart trades={tradeRecords} />
+
+                {/* Detailed Stats Cards */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-6">
                     <div className="bg-white rounded-xl border shadow-sm p-4">
                         <p className="text-xs text-gray-500 uppercase">Largest Win</p>
                         <p className="text-xl font-bold text-green-600">{formatCurrency(metrics.largestWin)}</p>
@@ -344,3 +353,5 @@ export default function DashboardPage() {
         </ThemeProvider>
     );
 }
+
+import { format } from "date-fns";

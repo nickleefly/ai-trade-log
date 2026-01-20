@@ -18,11 +18,12 @@ This document lists the specific, actionable tasks required to implement the Tra
 - [x] Integrate `useFilteredTrades` for real-time data in Day View
 - [x] Add Day View metrics to Trade History page
 
-## Phase 3: Dashboard Widgets [P]
-- [ ] Build `WeeklySummaryCards.tsx`.
-- [ ] Build `TradeTimeHeatmap.tsx` using MUI Charts.
-- [ ] Build `DurationPerformanceChart.tsx`.
-- [ ] Build `DrawdownChart.tsx`.
+## Phase 3: Dashboard Widgets [x]
+- [x] Create `WeeklySummary.tsx` for rolling 4-week performance
+- [x] Implement `TradeTimeHeatmap.tsx` using MUI X-Charts (Time of Day vs Day of Week)
+- [x] Build `DurationPerformanceChart.tsx` (Hold Time vs Profitability)
+- [x] Implement `AdvancedDrawdownChart.tsx` with peak-to-trough visualization
+- [x] Integrated widgets into the main Dashboard page
 
 ## Phase 4: Notebook & Knowledge Base
 - [ ] Setup TipTap dependencies and basic configuration.
