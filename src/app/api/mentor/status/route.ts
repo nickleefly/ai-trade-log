@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/db";
+import { db } from "@/drizzle/db";
 import { MentorConnectionTable } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 
