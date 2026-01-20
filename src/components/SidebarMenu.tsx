@@ -26,7 +26,7 @@ const navItems = [
     { name: 'Notebook', href: '/private/notebook', icon: BookOpen },
     { name: 'Reports', href: '/private/statistics', icon: BarChart3 },
     { name: 'Strategies', href: '/private/strategies', icon: Target },
-    { name: 'Progress', href: '/private/progress', icon: CheckSquare },
+    { name: 'Progress Tracker', href: '/private/progress-tracker', icon: CheckSquare },
 ];
 
 export default function SidebarMenu() {
