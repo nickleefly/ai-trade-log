@@ -108,14 +108,6 @@ export const TradeRelations = relations(TradeTable, ({ one, many }) => ({
     executions: many(ExecutionTable),
 }));
 
-export const ReportsTable = pgTable("reports", {
-    id: uuid("id").primaryKey().defaultRandom(),
-    userId: text("user_id").notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    reportData: jsonb("report_data").notNull(),
-    isFavorite: boolean("is_favorite").default(false).notNull(),
-});
-
 export const TransactionsTable = pgTable("transactions", {
     id: uuid("id").primaryKey().defaultRandom(),
     userId: text("user_id").notNull(),

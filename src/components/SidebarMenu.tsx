@@ -16,8 +16,7 @@ import {
     ChevronRight,
     FlaskConical,
     Newspaper,
-    Users,
-    Sparkles
+    Users
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -30,7 +29,6 @@ const navItems = [
     { name: 'Notebook', href: '/private/notebook', icon: BookOpen },
     { name: 'Reports', href: '/private/statistics', icon: BarChart3 },
     { name: 'Strategies', href: '/private/strategies', icon: Target },
-    { name: 'TradeAI', href: '/private/tradeAI', icon: Sparkles },
     { name: 'Backtesting', href: '/private/backtesting', icon: FlaskConical },
     { name: 'Resources', href: '/private/resources', icon: Newspaper },
     { name: 'Mentor Mode', href: '/private/mentor', icon: Users },

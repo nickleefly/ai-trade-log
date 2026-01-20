@@ -154,9 +154,6 @@ export default function HomePage() {
                             <Link href="/statistics">
                                 <div className="nav-link">Statistics</div>
                             </Link>
-                            <Link href="/tradeAI">
-                                <div className="nav-link">TradeAI</div>
-                            </Link>
                         </div>
                     </div>
                     <SignedOut>

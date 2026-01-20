@@ -27,9 +27,7 @@ This project is a personal passion, developed in my free time. If you find it us
   - [Calendar](#calendar)
   - [History](#history)
   - [Statistics](#statistics)
-  - [Trade AI](#trade-ai)
   - [Strategies](#strategies)
-  - [Archive](#archive)
 - [Technicals](#technicals)
 
 ---
@@ -89,18 +87,7 @@ The Statistics page turns your trade history into charts using 10+ algorithms.
 - Same filtering as the History page  
 - See what’s working and what’s not  
 
-https://github.com/user-attachments/assets/8b8b333a-0bfc-432c-ad23-d74de50edba3  
-
----
-
-### Trade AI
-Trade AI gives you an objective view of your performance.
-
-**Features**
-- AI-generated reports on time management, risk, and instruments  
-- Follow-up questions for deeper analysis  
-
-https://github.com/user-attachments/assets/ff19b8b4-f324-4f2e-b63b-0a32a4376cbc  
+https://github.com/user-attachments/assets/8b8b333a-0bfc-432c-ad23-d74de50edba3
 
 ---
 
@@ -108,21 +95,9 @@ https://github.com/user-attachments/assets/ff19b8b4-f324-4f2e-b63b-0a32a4376cbc
 The Strategies page helps you create and measure rule-based trading plans.
 
 **Features**
-- Build rule-based trading strategies and track how each trade performs over time.  
-- The "Add New Trade" dialog includes your custom strategy rules, so you can track how well you followed them.  
+- Build rule-based trading strategies and track how each trade performs over time.
+- The "Add New Trade" dialog includes your custom strategy rules, so you can track how well you followed them.
 - The History page shows ratings and a strategies indicator, displaying the percentage of followed rules.
-
----
-
-### Archive
-Save and revisit AI reports at any time.
-
-**Features**
-- Pagination for browsing  
-- Sorting (oldest ↔ newest)  
-- Mark favorites  
-
-<img width="1710" alt="Screenshot 2025-05-06 at 13 49 52" src="https://github.com/user-attachments/assets/5855165d-c93d-402b-9d1d-9afc0edeef35" />  
 
 ---
 
