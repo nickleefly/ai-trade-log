@@ -11,13 +11,15 @@ import {
     ChevronDown,
     Search,
     FileText,
-    Tag
+    Tag,
+    Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
     getFolders,
-    createFolder
+    createFolder,
+    deleteFolder
 } from "@/server/actions/notebook";
 import {
     Dialog,
@@ -26,6 +28,16 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import Link from "next/link";
@@ -42,6 +54,8 @@ export function NotebookSidebar() {
     const [folders, setFolders] = useState<FolderItem[]>([]);
     const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
     const [newFolderName, setNewFolderName] = useState("");
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [folderToDelete, setFolderToDelete] = useState<FolderItem | null>(null);
     const pathname = usePathname();
 
     useEffect(() => {
@@ -65,6 +79,26 @@ export function NotebookSidebar() {
         } else {
             toast.error("Failed to create folder");
         }
+    };
+
+    const handleDeleteFolder = async () => {
+        if (!folderToDelete) return;
+
+        const result = await deleteFolder(folderToDelete.id);
+        if (result.success) {
+            toast.success("Folder deleted");
+            setDeleteDialogOpen(false);
+            setFolderToDelete(null);
+            loadFolders();
+        } else {
+            toast.error(result.error || "Failed to delete folder");
+        }
+    };
+
+    const openDeleteDialog = (folder: FolderItem, e: React.MouseEvent) => {
+        e.preventDefault();
+        setFolderToDelete(folder);
+        setDeleteDialogOpen(true);
     };
 
     const navItems = [
@@ -146,6 +180,13 @@ export function NotebookSidebar() {
                         >
                             <Folder className="h-4 w-4 text-zinc-400 group-hover:text-zinc-600" />
                             <span className="flex-1 truncate">{folder.name}</span>
+                            <button
+                                onClick={(e) => openDeleteDialog(folder, e)}
+                                className="opacity-0 group-hover:opacity-100 p-1 hover:bg-zinc-200 rounded transition-all"
+                                title="Delete folder"
+                            >
+                                <Trash2 className="h-3 w-3 text-zinc-400 hover:text-red-600" />
+                            </button>
                         </Link>
                     ))}
                 </div>
@@ -173,6 +214,24 @@ export function NotebookSidebar() {
                     New Note
                 </Button>
             </div>
+
+            {/* Delete Folder Confirmation Dialog */}
+            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Folder</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to delete "{folderToDelete?.name}"? This will also delete all notes inside this folder. This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteFolder} className="bg-red-600 hover:bg-red-700">
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </aside>
     );
 }

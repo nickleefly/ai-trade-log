@@ -37,6 +37,33 @@ export async function createFolder(name: string, color?: string, parentId?: stri
     }
 }
 
+export async function deleteFolder(id: string) {
+    const { userId } = await auth();
+    if (!userId) return { success: false, error: "Unauthorized" };
+
+    try {
+        // Delete all notes in the folder
+        await db.delete(NotebookTable)
+            .where(and(
+                eq(NotebookTable.folderId, id),
+                eq(NotebookTable.userId, userId)
+            ));
+
+        // Delete the folder
+        await db.delete(NotebookFolderTable)
+            .where(and(
+                eq(NotebookFolderTable.id, id),
+                eq(NotebookFolderTable.userId, userId)
+            ));
+
+        revalidatePath("/private/notebook");
+        return { success: true };
+    } catch (error) {
+        console.error("Error deleting folder:", error);
+        return { success: false, error: "Failed to delete folder" };
+    }
+}
+
 // --- Notebooks/Notes ---
 
 export async function getNotebooks(folderId?: string) {
