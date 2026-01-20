@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, TrendingUp, TrendingDown } from "lucide-react";
+import { Loader2, TrendingUp, TrendingDown, PlayCircle } from "lucide-react";
 import Link from "next/link";
 
 interface SessionListProps {
@@ -77,7 +77,7 @@ export function SessionList({ userId, onSessionChange }: SessionListProps) {
         return (
             <Card>
                 <CardContent className="flex flex-col items-center justify-center py-12">
-                    <PlayCircle2 className="h-12 w-12 text-gray-400 mb-4" />
+                    <PlayCircle className="h-12 w-12 text-gray-400 mb-4" />
                     <p className="text-gray-500 mb-2">No backtesting sessions yet</p>
                     <p className="text-sm text-gray-400 mb-4">Start testing your strategies today</p>
                     <Link href="/private/backtesting/create">

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SessionList } from "@/components/backtesting/SessionList";
-import { Plus, PlayCircle2, TrendingUp, BarChart3 } from "lucide-react";
+import { Plus, PlayCircle, TrendingUp, BarChart3 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
@@ -35,7 +35,7 @@ export default function BacktestingPage() {
                 </CardHeader>
                 <CardContent className="grid md:grid-cols-3 gap-4">
                     <div className="p-4 border rounded-lg bg-gradient-to-br from-blue-50 to-blue-100">
-                        <PlayCircle2 className="h-8 w-8 text-blue-600 mb-2" />
+                        <PlayCircle className="h-8 w-8 text-blue-600 mb-2" />
                         <h3 className="font-semibold mb-2 text-gray-900">Travel Back in Time</h3>
                         <p className="text-sm text-gray-600">
                             Navigate through historical market conditions at your own pace
