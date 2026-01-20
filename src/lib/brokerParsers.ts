@@ -1,5 +1,5 @@
 /**
- * Broker-specific CSV parsers for TradeZella-style multi-broker import.
+ * Broker-specific CSV parsers for TradeAnaly-style multi-broker import.
  * Supports: ThinkorSwim, Interactive Brokers, TradeStation, Sierra Chart
  */
 

@@ -1,4 +1,4 @@
-# Technical Implementation Plan: TradeZella Clone
+# Technical Implementation Plan: TradeAnaly Clone
 
 This document maps the requirements defined in `spec.md` to technical architecture and implementation details, ensuring compliance with the project `constitution.md`.
 
@@ -31,14 +31,14 @@ Implement new pages as Next.js App Router routes in `src/app/private/`.
 ### Phase -1: Pre-Implementation Gates (Constitutional Check)
 - [ ] **Simplicity Gate**: Using standard Next.js patterns?
 - [ ] **Type Gate**: All new tables in `schema.ts` have Zod schemas?
-- [ ] **Integration Gate**: `analyticsEngine.ts` covers the 20+ Zella metrics?
+- [ ] **Integration Gate**: `analyticsEngine.ts` covers the 20+ Analy metrics?
 
 ### Phase 1: Navigation & Layout Overhaul
 - Update `PrivateLayoutClient.tsx` with new sidebar links.
 - Create common `FiltersBar.tsx` for date/account selection across all pages.
 
 ### Phase 2: Analytics & Metrics
-- Add calculated fields to `src/lib/analyticsEngine.ts` for Zella Score components.
+- Add calculated fields to `src/lib/analyticsEngine.ts` for Analy Score components.
 - Implement `MetricsBar.tsx` as a reusable component for `History` and `Day-view`.
 
 ### Phase 3: Notebook & Organization

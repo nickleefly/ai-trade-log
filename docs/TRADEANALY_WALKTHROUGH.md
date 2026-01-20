@@ -1,8 +1,8 @@
-# TradeZella Clone - Implementation Walkthrough
+# TradeAnaly Clone - Implementation Walkthrough
 
 ## Summary
 
-Successfully implemented core features of a TradeZella-like trading journal, building on the existing `ai-trading-journal` Next.js project.
+Successfully implemented core features of a TradeAnaly-like trading journal, building on the existing `ai-trading-journal` Next.js project.
 
 ## Changes Made
 
@@ -33,7 +33,7 @@ Successfully implemented core features of a TradeZella-like trading journal, bui
 
 #### [analyticsEngine.ts](file:///c:/Users/Xiuyu/Documents/ai-trading-journal/src/lib/analyticsEngine.ts)
 
-Implemented 20+ TradeZella-style metrics:
+Implemented 20+ TradeAnaly-style metrics:
 
 | Metric | Description |
 |--------|-------------|
@@ -44,9 +44,9 @@ Implemented 20+ TradeZella-style metrics:
 | **Expectancy** | Expected $ per trade |
 | **Max Drawdown** | Peak-to-trough decline |
 | **Recovery Factor** | Net P&L / Max Drawdown |
-| **Zella Score** | 0-100 composite rating |
+| **Analy Score** | 0-100 composite rating |
 
-**Zella Score Components:**
+**Analy Score Components:**
 - Profit Factor (25 pts)
 - Win Rate (20 pts)
 - R-Multiple (25 pts)
@@ -83,9 +83,9 @@ console.log(`Imported: ${result.trades.length} trades`);
 
 #### [/private/dashboard](file:///c:/Users/Xiuyu/Documents/ai-trading-journal/src/app/private/dashboard/page.tsx)
 
-New TradeZella-style dashboard featuring:
+New TradeAnaly-style dashboard featuring:
 
-- **Zella Score Gauge** - Dark gradient card with animated gauge
+- **Analy Score Gauge** - Dark gradient card with animated gauge
 - **8 Key Metric Cards** - Net P&L, Win Rate, Profit Factor, Avg R, Expectancy, Drawdown, Day Win Rate, Hold Time
 - **Equity Curve Chart** - Cumulative P&L with color-coded gains/losses
 - **Summary Stats Row** - Largest Win/Loss, Average Win/Loss
@@ -96,16 +96,16 @@ New TradeZella-style dashboard featuring:
 
 ### Build Status
 ```
-✅ npm run build - Exit code: 0
-✅ All routes compiled successfully
-✅ /private/dashboard route available
+�?npm run build - Exit code: 0
+�?All routes compiled successfully
+�?/private/dashboard route available
 ```
 
 ### Database Migration
 ```
-✅ Migration 0020_round_the_anarchist.sql generated
-✅ Schema pushed to database
-✅ 12 tables, 34 columns in trades table
+�?Migration 0020_round_the_anarchist.sql generated
+�?Schema pushed to database
+�?12 tables, 34 columns in trades table
 ```
 
 ---
@@ -120,7 +120,7 @@ Remaining features to implement:
 
 ---
 
-## TradeZella UI Reconnaissance
+## TradeAnaly UI Reconnaissance
 
 ### Captured Pages
 
@@ -136,21 +136,21 @@ Remaining features to implement:
 ### Screenshots Captured
 
 ````carousel
-![Dashboard](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\tradezella_tracking.png)
+![Dashboard](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\TradeAnaly_tracking.png)
 <!-- slide -->
 ![Day View](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\dayview.png)
 <!-- slide -->
-![Trade View](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\tradezella_tradeview.png)
+![Trade View](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\TradeAnaly_tradeview.png)
 <!-- slide -->
-![Reports](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\tradezella_reports.png)
+![Reports](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\TradeAnaly_reports.png)
 <!-- slide -->
 ![Reports Overview](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\reports_overview.png)
 <!-- slide -->
-![Notebook](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\tradezella_notebook.png)
+![Notebook](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\TradeAnaly_notebook.png)
 <!-- slide -->
-![Strategies](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\tradezella_strategies.png)
+![Strategies](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\TradeAnaly_strategies.png)
 <!-- slide -->
-![Trade Replay](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\tradezella_replay.png)
+![Trade Replay](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\TradeAnaly_replay.png)
 <!-- slide -->
 ![Progress Tracker](C:\Users\Xiuyu\.gemini\antigravity\brain\eeff3c17-ca42-49aa-8c59-5b01137ff045\progress_tracker.png)
 <!-- slide -->
@@ -166,22 +166,22 @@ Remaining features to implement:
 ### Navigation Structure
 
 ```
-TradeZella Sidebar:
+TradeAnaly Sidebar:
 ├── Add Trade (button)
 ├── Dashboard
 ├── Day View
 ├── Trade View
 ├── Notebook
 ├── Reports
-│   ├── Performance (NEW)
-│   ├── Overview
-│   ├── Reports
-│   ├── Compare
-│   └── Calendar
+�?  ├── Performance (NEW)
+�?  ├── Overview
+�?  ├── Reports
+�?  ├── Compare
+�?  └── Calendar
 ├── Strategies
-│   ├── My Strategies
-│   ├── Shared with me
-│   └── Templates
+�?  ├── My Strategies
+�?  ├── Shared with me
+�?  └── Templates
 ├── Trade Replay (NEW)
 ├── Progress Tracker
 └── Resources

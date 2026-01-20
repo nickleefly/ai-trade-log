@@ -1,6 +1,6 @@
-# Feature Specification: TradeZella Clone
+# Feature Specification: TradeAnaly Clone
 
-This specification defines the functional requirements for replicating the TradeZella trading journal experience.
+This specification defines the functional requirements for replicating the TradeAnaly trading journal experience.
 
 ---
 
@@ -56,5 +56,5 @@ This specification defines the functional requirements for replicating the Trade
 | **AC-001** | Calendar cells must accurately reflect the sum of trade `result` fields for that day. |
 | **AC-002** | Analytics charts must update instantly when filters (date range, account) change. |
 | **AC-003** | CSV Import must detect the broker format automatically and map columns correctly. |
-| **AC-004** | Zella Score calculation must match the documented formula in the engine. |
+| **AC-004** | Analy Score calculation must match the documented formula in the engine. |
 | **AC-005** | Sidebar navigation must include links to all new pages (Day View, Notebook, Progress). |

@@ -51,7 +51,7 @@ export const TradeTable = pgTable(
         }),
         appliedOpenRules: jsonb("applied_open_rules").$type<Rule[]>(),
         appliedCloseRules: jsonb("applied_close_rules").$type<Rule[]>(),
-        // TradeZella-style fields for enhanced analytics
+        // TradeAnaly-style fields for enhanced analytics
         stopLoss: text("stop_loss"),              // Stop loss price
         takeProfit: text("take_profit"),          // Take profit price
         plannedR: text("planned_r"),              // Planned R-Multiple
@@ -160,7 +160,7 @@ export const JournalTable = pgTable(
 );
 
 // ============================================
-// TradeZella-style Tables
+// TradeAnaly-style Tables
 // ============================================
 
 // TagTable - Custom tagging system for trade categorization
@@ -212,6 +212,26 @@ export const ExecutionTable = pgTable(
     })
 );
 
+// NotebookFolderTable - Organization for notebooks
+export const NotebookFolderTable = pgTable(
+    "notebook_folders",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        name: text("name").notNull(),
+        parentId: uuid("parent_id"), // For nested folders
+        color: text("color").default("#3B82F6"),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("notebook_folders_user_id_idx").on(table.userId),
+    })
+);
+
 // NotebookTable - Trading plans, loss recaps, and templates
 export const NotebookTable = pgTable(
     "notebooks",
@@ -223,6 +243,7 @@ export const NotebookTable = pgTable(
         title: text("title").notNull(),
         type: text("type").notNull(), // "trading_plan" | "loss_recap" | "template" | "weekly_review"
         content: jsonb("content"), // Rich text content
+        folderId: uuid("folder_id").references(() => NotebookFolderTable.id, { onDelete: "set null" }),
         linkedTradeIds: jsonb("linked_trade_ids").$type<string[]>(),
         createdAt: timestamp("created_at", { withTimezone: true })
             .defaultNow()
@@ -234,6 +255,7 @@ export const NotebookTable = pgTable(
     (table) => ({
         userIdIndex: index("notebooks_user_id_idx").on(table.userId),
         typeIndex: index("notebooks_type_idx").on(table.type),
+        folderIdIndex: index("notebooks_folder_id_idx").on(table.folderId),
     })
 );
 
@@ -290,5 +312,23 @@ export const AccountRelations = relations(AccountTable, ({ one }) => ({
     user: one(UserTable, {
         fields: [AccountTable.userId],
         references: [UserTable.id],
+    }),
+}));
+export const NotebookRelations = relations(NotebookTable, ({ one }) => ({
+    folder: one(NotebookFolderTable, {
+        fields: [NotebookTable.folderId],
+        references: [NotebookFolderTable.id],
+    }),
+}));
+
+export const NotebookFolderRelations = relations(NotebookFolderTable, ({ many, one }) => ({
+    notebooks: many(NotebookTable),
+    parent: one(NotebookFolderTable, {
+        fields: [NotebookFolderTable.parentId],
+        references: [NotebookFolderTable.id],
+        relationName: "folder_nesting",
+    }),
+    children: many(NotebookFolderTable, {
+        relationName: "folder_nesting",
     }),
 }));

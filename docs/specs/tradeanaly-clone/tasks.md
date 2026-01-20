@@ -1,6 +1,6 @@
-# Execution Tasks: TradeZella Clone
+# Execution Tasks: TradeAnaly Clone
 
-This document lists the specific, actionable tasks required to implement the TradeZella Clone features, derived from `plan.md`.
+This document lists the specific, actionable tasks required to implement the TradeAnaly Clone features, derived from `plan.md`.
 
 ---
 
@@ -33,7 +33,7 @@ This document lists the specific, actionable tasks required to implement the Tra
 
 ## Phase 5: Advanced Reports
 - [ ] Refactor `/private/reports` into tabbed sub-navigation.
-- [ ] Implement `PerformanceReport.tsx` (Zella Score focus).
+- [ ] Implement `PerformanceReport.tsx` (Analy Score focus).
 - [ ] Implement `CompareReport.tsx` (Group vs Group logic).
 
 ## Phase 6: Polish & Verification

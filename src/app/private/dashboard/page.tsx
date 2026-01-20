@@ -86,8 +86,8 @@ function MetricCard({
     );
 }
 
-// Zella Score Gauge Component
-function ZellaScoreGauge({ score }: { score: number }) {
+// Analy Score Gauge Component
+function AnalyScoreGauge({ score }: { score: number }) {
     const getScoreColor = (score: number) => {
         if (score >= 80) return "#22c55e"; // Green
         if (score >= 60) return "#3b82f6"; // Blue
@@ -106,7 +106,7 @@ function ZellaScoreGauge({ score }: { score: number }) {
         <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-6 text-white shadow-lg">
             <div className="flex items-center gap-2 mb-4">
                 <Zap className="w-5 h-5 text-yellow-400" />
-                <h3 className="text-lg font-semibold">Zella Score</h3>
+                <h3 className="text-lg font-semibold">Analy Score</h3>
             </div>
             <div className="flex items-center justify-center">
                 <Gauge
@@ -203,9 +203,9 @@ export default function DashboardPage() {
 
                 {/* Main Metrics Section */}
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                    {/* Zella Score */}
+                    {/* Analy Score */}
                     <div className="lg:col-span-1">
-                        <ZellaScoreGauge score={metrics.zellaScore} />
+                        <AnalyScoreGauge score={metrics.analyScore} />
                     </div>
 
                     {/* Key Metrics Grid */}

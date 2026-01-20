@@ -43,8 +43,8 @@ export interface AnalyticsMetrics {
     avgDailyPnL: number;
     totalTradingDays: number;
 
-    // Zella Score (0-100)
-    zellaScore: number;
+    // Analy Score (0-100)
+    analyScore: number;
 }
 
 export interface DayPerformance {
@@ -197,8 +197,8 @@ export function calculateMetrics(trades: Trade[]): AnalyticsMetrics {
         ? holdTimes.reduce((a, b) => a + b, 0) / holdTimes.length
         : 0;
 
-    // Zella Score calculation
-    const zellaScore = calculateZellaScore({
+    // Analy Score calculation
+    const analyScore = calculateAnalyScore({
         profitFactor,
         winRate,
         avgRMultiple,
@@ -231,7 +231,7 @@ export function calculateMetrics(trades: Trade[]): AnalyticsMetrics {
         avgHoldTime,
         avgDailyPnL,
         totalTradingDays,
-        zellaScore,
+        analyScore,
     };
 }
 
@@ -295,7 +295,7 @@ function calculateDrawdown(dailyPnL: DayPerformance[]): { maxDrawdown: number; m
 }
 
 /**
- * Calculate Zella Score (0-100 composite metric)
+ * Calculate Analy Score (0-100 composite metric)
  *
  * Components:
  * - Profit Factor: 25 points max
@@ -304,7 +304,7 @@ function calculateDrawdown(dailyPnL: DayPerformance[]): { maxDrawdown: number; m
  * - Consistency (trade count): 15 points max
  * - Risk Management (drawdown): 15 points max
  */
-interface ZellaScoreInput {
+interface AnalyScoreInput {
     profitFactor: number;
     winRate: number;
     avgRMultiple: number;
@@ -312,7 +312,7 @@ interface ZellaScoreInput {
     maxDrawdown: number;
 }
 
-export function calculateZellaScore(input: ZellaScoreInput): number {
+export function calculateAnalyScore(input: AnalyScoreInput): number {
     const { profitFactor, winRate, avgRMultiple, totalTrades, maxDrawdown } = input;
 
     // Profit Factor Score (0-25)
@@ -491,7 +491,7 @@ function getEmptyMetrics(): AnalyticsMetrics {
         avgHoldTime: 0,
         avgDailyPnL: 0,
         totalTradingDays: 0,
-        zellaScore: 0,
+        analyScore: 0,
     };
 }
 

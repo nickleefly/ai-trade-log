@@ -11,6 +11,8 @@ import {
 import { useAppSelector } from "@/redux/store";
 import { getCapital } from "@/server/actions/user";
 import { useEffect, useRef, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { WinRateTab, PnLTab, CalendarTab, CompareTab } from "@/components/reports/ReportTabs";
 
 import { useFilteredTrades } from "@/hooks/useFilteredTrades";
 
@@ -69,36 +71,71 @@ export default function Page() {
     );
 
     return (
-        <div className="md:h-full">
-            <div className="flex items-center justify-between pt-2 md:px-4">
-                <div className="flex items-center gap-4">
-                    <p className="max-md:text-[.7rem]">Details</p>
-
-                    <div
-                        ref={buttonRef}
-                        onClick={handleSwitch}
-                        className={`${isSwitchChartsActive
-                                ? "switch-button active"
-                                : "switch-button"
-                            }`}
-                    />
-                    <p className="max-md:text-[.7rem]">Summary</p>
+        <div className="h-full flex flex-col p-4 md:p-8 space-y-6">
+            <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold text-zinc-900">Reports</h1>
+                    <p className="text-zinc-500">Deep dive into your trading performance.</p>
                 </div>
-
                 <AddCapitalDialog />
             </div>
-            {isSwitchChartsActive ? (
-                <StatsGridPageTwo
-                    start={startValueToUse}
-                    end={end}
-                    oterData={otherDataPageTwo}
-                />
-            ) : (
-                <StatsGridPageOne
-                    tradingData={tradingData}
-                    otherData={otherData}
-                />
-            )}
+
+            <Tabs defaultValue="overview" className="flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-6">
+                    <TabsList className="bg-zinc-100 p-1 rounded-lg">
+                        <TabsTrigger value="overview" className="px-4 py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md transition-all">Overview</TabsTrigger>
+                        <TabsTrigger value="winrate" className="px-4 py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md transition-all">Win Rate</TabsTrigger>
+                        <TabsTrigger value="pnl" className="px-4 py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md transition-all">PnL</TabsTrigger>
+                        <TabsTrigger value="calendar" className="px-4 py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md transition-all">Calendar</TabsTrigger>
+                        <TabsTrigger value="compare" className="px-4 py-2 data-[state=active]:bg-white data-[state=active]:shadow-sm rounded-md transition-all">Compare</TabsTrigger>
+                    </TabsList>
+
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-zinc-600">Details View</span>
+                        <div
+                            ref={buttonRef}
+                            onClick={handleSwitch}
+                            className={`${isSwitchChartsActive
+                                ? "switch-button active"
+                                : "switch-button"
+                                }`}
+                        />
+                    </div>
+                </div>
+
+                <div className="flex-1 overflow-auto">
+                    <TabsContent value="overview" className="h-full mt-0">
+                        {isSwitchChartsActive ? (
+                            <StatsGridPageTwo
+                                start={startValueToUse}
+                                end={end}
+                                oterData={otherDataPageTwo}
+                            />
+                        ) : (
+                            <StatsGridPageOne
+                                tradingData={tradingData}
+                                otherData={otherData}
+                            />
+                        )}
+                    </TabsContent>
+
+                    <TabsContent value="winrate" className="h-full mt-0">
+                        <WinRateTab trades={tradeRecords} />
+                    </TabsContent>
+
+                    <TabsContent value="pnl" className="h-full mt-0">
+                        <PnLTab trades={tradeRecords} />
+                    </TabsContent>
+
+                    <TabsContent value="calendar" className="h-full mt-0">
+                        <CalendarTab trades={tradeRecords} />
+                    </TabsContent>
+
+                    <TabsContent value="compare" className="h-full mt-0">
+                        <CompareTab trades={tradeRecords} />
+                    </TabsContent>
+                </div>
+            </Tabs>
         </div>
     );
 }

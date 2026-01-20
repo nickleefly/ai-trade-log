@@ -42,9 +42,9 @@ export default function SidebarMenu() {
                 {!collapsed && (
                     <div className="flex items-center gap-2 font-bold text-white text-lg">
                         <div className="w-8 h-8 bg-blue-600 rounded-md flex items-center justify-center">
-                            TZ
+                            TA
                         </div>
-                        <span>TradeZella</span>
+                        <span>TradeAnaly</span>
                     </div>
                 )}
                 {collapsed && (

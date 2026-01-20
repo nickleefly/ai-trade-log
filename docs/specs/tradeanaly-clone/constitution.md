@@ -1,6 +1,6 @@
-# Project Constitution: TradeZella Clone
+# Project Constitution: TradeAnaly Clone
 
-This document defines the architectural DNA and development principles for the TradeZella Clone project. All specifications and implementations must adhere to these articles.
+This document defines the architectural DNA and development principles for the TradeAnaly Clone project. All specifications and implementations must adhere to these articles.
 
 ---
 
