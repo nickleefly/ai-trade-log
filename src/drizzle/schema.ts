@@ -509,3 +509,47 @@ export const BacktestingTradeRelations = relations(BacktestingTradeTable, ({ one
         references: [StrategyTable.id],
     }),
 }));
+
+// ============================================
+// Mentor Mode Tables
+// ============================================
+
+// MentorConnectionTable - Mentor-mentee relationships
+export const MentorConnectionTable = pgTable(
+    "mentor_connections",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        mentorId: text("mentor_id")
+            .notNull()
+            .references(() => UserTable.id),
+        menteeId: text("mentee_id")
+            .notNull()
+            .references(() => UserTable.id),
+        status: text("status").notNull(), // "pending" | "accepted" | "declined" | "cancelled"
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        mentorIdIndex: index("mentor_connections_mentor_id_idx").on(table.mentorId),
+        menteeIdIndex: index("mentor_connections_mentee_id_idx").on(table.menteeId),
+    })
+);
+
+// ============================================
+// Mentor Relations
+// ============================================
+
+export const MentorConnectionRelations = relations(MentorConnectionTable, ({ one }) => ({
+    mentor: one(UserTable, {
+        fields: [MentorConnectionTable.mentorId],
+        references: [UserTable.id],
+    }),
+    mentee: one(UserTable, {
+        fields: [MentorConnectionTable.menteeId],
+        references: [UserTable.id],
+    }),
+}));
