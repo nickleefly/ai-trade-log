@@ -430,3 +430,82 @@ export const UserStreakRelations = relations(UserStreakTable, ({ one }) => ({
         references: [UserTable.id],
     }),
 }));
+
+// ============================================
+// Backtesting Tables
+// ============================================
+
+// BacktestingSessionTable - Backtesting simulation sessions
+export const BacktestingSessionTable = pgTable(
+    "backtesting_sessions",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        name: text("name").notNull(),
+        startDate: text("start_date").notNull(), // YYYY-MM-DD
+        endDate: text("end_date").notNull(), // YYYY-MM-DD
+        symbol: text("symbol").notNull(),
+        timeframe: text("timeframe").notNull(), // "1m" | "5m" | "1h" | "1d"
+        initialCapital: text("initial_capital").notNull(),
+        status: text("status").notNull(), // "in_progress" | "completed" | "cancelled"
+        result: jsonb("result"), // Final P&L, win rate, etc.
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("backtesting_sessions_user_id_idx").on(table.userId),
+    })
+);
+
+// BacktestingTradeTable - Individual trades in backtesting session
+export const BacktestingTradeTable = pgTable(
+    "backtesting_trades",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        sessionId: uuid("session_id")
+            .notNull()
+            .references(() => BacktestingSessionTable.id, { onDelete: "cascade" }),
+        symbol: text("symbol").notNull(),
+        direction: text("direction").notNull(), // "LONG" | "SHORT"
+        entryPrice: text("entry_price").notNull(),
+        exitPrice: text("exit_price"),
+        quantity: text("quantity").notNull(),
+        entryDate: text("entry_date").notNull(),
+        exitDate: text("exit_date"),
+        pnl: text("pnl"),
+        notes: text("notes"),
+        strategyId: uuid("strategy_id").references(() => StrategyTable.id),
+        screenshotUrl: text("screenshot_url"),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        sessionIdIndex: index("backtesting_trades_session_id_idx").on(table.sessionId),
+    })
+);
+
+// ============================================
+// Backtesting Relations
+// ============================================
+
+export const BacktestingSessionRelations = relations(BacktestingSessionTable, ({ many }) => ({
+    trades: many(BacktestingTradeTable),
+}));
+
+export const BacktestingTradeRelations = relations(BacktestingTradeTable, ({ one }) => ({
+    session: one(BacktestingSessionTable, {
+        fields: [BacktestingTradeTable.sessionId],
+        references: [BacktestingSessionTable.id],
+    }),
+    strategy: one(StrategyTable, {
+        fields: [BacktestingTradeTable.strategyId],
+        references: [StrategyTable.id],
+    }),
+}));
