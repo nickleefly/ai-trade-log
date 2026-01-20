@@ -283,6 +283,85 @@ export const AccountTable = pgTable(
 );
 
 // ============================================
+// Progress Tracker Tables
+// ============================================
+
+// ProgressRuleTable - Rules for daily habit tracking
+export const ProgressRuleTable = pgTable(
+    "progress_rules",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        name: text("name").notNull(),
+        type: text("type").notNull(), // "MANUAL" | "AUTOMATED"
+        condition: jsonb("condition"), // For automated rules
+        targetDays: jsonb("target_days").$type<string[]>(), // ["Mon", "Tue", "Wed", "Thu", "Fri"]
+        isActive: boolean("is_active").default(true).notNull(),
+        order: integer("order").default(0).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("progress_rules_user_id_idx").on(table.userId),
+    })
+);
+
+// ProgressLogTable - Daily completion tracking
+export const ProgressLogTable = pgTable(
+    "progress_logs",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        ruleId: uuid("rule_id")
+            .notNull()
+            .references(() => ProgressRuleTable.id),
+        date: text("date").notNull(), // YYYY-MM-DD format
+        completed: boolean("completed").default(false).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdRuleIdDateIndex: index("progress_logs_user_rule_date_idx").on(
+            table.userId,
+            table.ruleId,
+            table.date
+        ),
+    })
+);
+
+// UserStreakTable - Track user's current streak
+export const UserStreakTable = pgTable(
+    "user_streaks",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        currentStreak: integer("current_streak").default(0).notNull(),
+        longestStreak: integer("longest_streak").default(0).notNull(),
+        lastCompletedDate: text("last_completed_date"), // YYYY-MM-DD
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("user_streaks_user_id_idx").on(table.userId),
+    })
+);
+
+// ============================================
 // Relations for new tables
 // ============================================
 
@@ -330,5 +409,24 @@ export const NotebookFolderRelations = relations(NotebookFolderTable, ({ many, o
     }),
     children: many(NotebookFolderTable, {
         relationName: "folder_nesting",
+    }),
+}));
+
+// Progress Tracker Relations
+export const ProgressRuleRelations = relations(ProgressRuleTable, ({ many }) => ({
+    logs: many(ProgressLogTable),
+}));
+
+export const ProgressLogRelations = relations(ProgressLogTable, ({ one }) => ({
+    rule: one(ProgressRuleTable, {
+        fields: [ProgressLogTable.ruleId],
+        references: [ProgressRuleTable.id],
+    }),
+}));
+
+export const UserStreakRelations = relations(UserStreakTable, ({ one }) => ({
+    user: one(UserTable, {
+        fields: [UserStreakTable.userId],
+        references: [UserTable.id],
     }),
 }));
