@@ -11,11 +11,12 @@ This document lists the specific, actionable tasks required to implement the Tra
 - [x] Build global `AccountSelector` and `DateRangePicker` components.
 - [x] Integrate `GlobalFiltersBar` into Dashboard and History views.
 
-## Phase 2: Day View & Metrics
-- [ ] [P] Create `FullCalendar.tsx` with daily P&L color logic.
-- [ ] [P] Build `DayTradeList.tsx` with expandable summary rows.
-- [ ] Implement `MetricsBar.tsx` for `Trade View` and `Day View`.
-- [ ] Integrate metrics calculation from `analyticsEngine.ts` into page data fetching.
+## Phase 2: Day View & Metrics [x]
+- [x] Setup Day View page structure at `/private/day-view`
+- [x] Create `DayMetricsBar.tsx` using `analyticsEngine.ts`
+- [x] Implement `DailyTradeGroup.tsx` for expandable day rows
+- [x] Integrate `useFilteredTrades` for real-time data in Day View
+- [x] Add Day View metrics to Trade History page
 
 ## Phase 3: Dashboard Widgets [P]
 - [ ] Build `WeeklySummaryCards.tsx`.
