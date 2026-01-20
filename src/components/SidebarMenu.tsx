@@ -14,7 +14,8 @@ import {
     CheckSquare,
     ChevronLeft,
     ChevronRight,
-    FlaskConical
+    FlaskConical,
+    Newspaper
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,7 @@ const navItems = [
     { name: 'Reports', href: '/private/statistics', icon: BarChart3 },
     { name: 'Strategies', href: '/private/strategies', icon: Target },
     { name: 'Backtesting', href: '/private/backtesting', icon: FlaskConical },
+    { name: 'Resources', href: '/private/resources', icon: Newspaper },
     { name: 'Progress Tracker', href: '/private/progress-tracker', icon: CheckSquare },
 ];
 
