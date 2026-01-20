@@ -22,7 +22,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${mainFont.className} antialiased`}>
+            <body
+                className={`${mainFont.className} antialiased`}
+                suppressHydrationWarning>
                 <ReduxProvider>
                     <ClerkProvider>{children}</ClerkProvider>
                 </ReduxProvider>

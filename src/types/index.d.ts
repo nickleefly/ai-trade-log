@@ -23,6 +23,7 @@ export type Trades = {
     strategyName?: string;
     appliedOpenRules?: Rule[] | null;
     appliedCloseRules?: Rule[] | null;
+    accountId?: string | null;
 };
 
 export type SortByType =

@@ -12,6 +12,8 @@ import { useAppSelector } from "@/redux/store";
 import { getCapital } from "@/server/actions/user";
 import { useEffect, useRef, useState } from "react";
 
+import { useFilteredTrades } from "@/hooks/useFilteredTrades";
+
 export default function Page() {
     const [start, setStart] = useState<string | undefined>();
     const [end, setEnd] = useState<string | undefined>();
@@ -30,13 +32,10 @@ export default function Page() {
         setIsSwitchChartsActive((prev) => !prev);
     };
 
-    const trades = useAppSelector((state) => state.tradeRecords.listOfTrades);
-    const filteredTrades = useAppSelector(
-        (state) => state.history.filteredTrades
-    );
+    const tradeRecords = useFilteredTrades();
 
     const localCapital = useAppSelector((state) => state.statistics.capital);
-    const tradesToSort = filteredTrades || trades || [];
+    const tradesToSort = tradeRecords;
     const startValueToUse = localCapital ?? start;
 
     const tradingData = getDataForSummaryChartGridPageOne(tradesToSort);
@@ -78,11 +77,10 @@ export default function Page() {
                     <div
                         ref={buttonRef}
                         onClick={handleSwitch}
-                        className={`${
-                            isSwitchChartsActive
+                        className={`${isSwitchChartsActive
                                 ? "switch-button active"
                                 : "switch-button"
-                        }`}
+                            }`}
                     />
                     <p className="max-md:text-[.7rem]">Summary</p>
                 </div>

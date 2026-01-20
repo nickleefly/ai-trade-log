@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { getCapital } from "@/server/actions/user";
 import { OpenTradesTable } from "@/components/history/OpenTradesTable";
 import { CloseTradesTable } from "@/components/history/CloseTradesTable";
+import { useAuth } from "@clerk/nextjs";
+import { useFilteredTrades } from "@/hooks/useFilteredTrades";
 
 
 
@@ -15,17 +17,15 @@ export default function Page() {
     const [total, setTotal] = useState<number>(0);
     const [startCapital, setStartCapital] = useState<string | null>(null);
 
-    const trades = useAppSelector((state) => state.tradeRecords.listOfTrades);
-    const filteredTrades = useAppSelector(
-        (state) => state.history.filteredTrades
-    );
+    const { userId } = useAuth();
+    const tradeRecords = useFilteredTrades();
 
     const sortBy = useAppSelector((state) => state.history.sortBy);
     const timeframe = useAppSelector((state) => state.history.timeframe);
 
     const activeTab = useAppSelector((state) => state.history.activeTab);
 
-    const tradesToSort = filteredTrades || trades || [];
+    const tradesToSort = tradeRecords;
 
     useEffect(() => {
         async function fetchData() {
@@ -52,7 +52,7 @@ export default function Page() {
         );
         setSortedTrades(result);
         setTotal(reducedTotal);
-    }, [sortBy, timeframe, trades, filteredTrades]);
+    }, [sortBy, timeframe, tradeRecords]);
 
 
 
