@@ -7,6 +7,8 @@ import historyPageReducer from "./slices/historyPageSlice";
 import statisticsReducer from "./slices/statisticsSlice";
 import strategyReducer from "./slices/strategySlice";
 
+import globalFiltersReducer from "./slices/globalFiltersSlice";
+
 const store = configureStore({
     reducer: {
         calendar: calendarReducer,
@@ -14,6 +16,7 @@ const store = configureStore({
         history: historyPageReducer,
         statistics: statisticsReducer,
         strategies: strategyReducer,
+        globalFilters: globalFiltersReducer,
     },
     devTools: true,
 });

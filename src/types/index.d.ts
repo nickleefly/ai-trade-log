@@ -23,6 +23,12 @@ export type Trades = {
     strategyName?: string;
     appliedOpenRules?: Rule[] | null;
     appliedCloseRules?: Rule[] | null;
+    accountId?: string | null;
+    plannedR?: string | null;
+    realizedR?: string | null;
+    stopLoss?: string | null;
+    takeProfit?: string | null;
+    setup?: string | null;
 };
 
 export type SortByType =

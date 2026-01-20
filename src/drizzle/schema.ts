@@ -51,6 +51,19 @@ export const TradeTable = pgTable(
         }),
         appliedOpenRules: jsonb("applied_open_rules").$type<Rule[]>(),
         appliedCloseRules: jsonb("applied_close_rules").$type<Rule[]>(),
+        // TradeAnaly-style fields for enhanced analytics
+        stopLoss: text("stop_loss"),              // Stop loss price
+        takeProfit: text("take_profit"),          // Take profit price
+        plannedR: text("planned_r"),              // Planned R-Multiple
+        realizedR: text("realized_r"),            // Actual R-Multiple achieved
+        commission: text("commission"),            // Trading fees/commissions
+        slippage: text("slippage"),               // Entry/exit slippage
+        emotionBefore: text("emotion_before"),    // Pre-trade psychology
+        emotionAfter: text("emotion_after"),      // Post-trade psychology
+        setup: text("setup"),                     // Trade setup type (breakout, pullback, etc.)
+        timeframe: text("timeframe"),             // Chart timeframe used
+        screenshotUrl: text("screenshot_url"),    // Chart screenshot URL
+        accountId: uuid("account_id"),            // Multi-account support
     },
     (table) => ({
         userIdCloseDateIndex: index("userIdCloseDateIndex").on(
@@ -86,11 +99,13 @@ export const StrategyRelations = relations(StrategyTable, ({ many }) => ({
     trades: many(TradeTable),
 }));
 
-export const TradeRelations = relations(TradeTable, ({ one }) => ({
+export const TradeRelations = relations(TradeTable, ({ one, many }) => ({
     strategy: one(StrategyTable, {
         fields: [TradeTable.strategyId],
         references: [StrategyTable.id],
     }),
+    tradeTags: many(TradeTagsTable),
+    executions: many(ExecutionTable),
 }));
 
 export const ReportsTable = pgTable("reports", {
@@ -143,3 +158,398 @@ export const JournalTable = pgTable(
         ),
     })
 );
+
+// ============================================
+// TradeAnaly-style Tables
+// ============================================
+
+// TagTable - Custom tagging system for trade categorization
+export const TagTable = pgTable("tags", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: text("user_id")
+        .notNull()
+        .references(() => UserTable.id),
+    name: text("name").notNull(),
+    color: text("color").default("#3B82F6"), // Default blue
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// TradeTagsTable - Many-to-many junction for trade tags
+export const TradeTagsTable = pgTable(
+    "trade_tags",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        tradeId: text("trade_id")
+            .notNull()
+            .references(() => TradeTable.id, { onDelete: "cascade" }),
+        tagId: uuid("tag_id")
+            .notNull()
+            .references(() => TagTable.id, { onDelete: "cascade" }),
+    },
+    (table) => ({
+        tradeIdIndex: index("trade_tags_trade_id_idx").on(table.tradeId),
+        tagIdIndex: index("trade_tags_tag_id_idx").on(table.tagId),
+    })
+);
+
+// ExecutionTable - Individual entries/exits for scaling in/out
+export const ExecutionTable = pgTable(
+    "executions",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        tradeId: text("trade_id")
+            .notNull()
+            .references(() => TradeTable.id, { onDelete: "cascade" }),
+        type: text("type").notNull(), // "entry" | "exit" | "scale_in" | "scale_out"
+        price: text("price").notNull(),
+        quantity: text("quantity").notNull(),
+        executedAt: timestamp("executed_at", { withTimezone: true }).notNull(),
+        commission: text("commission"),
+        notes: text("notes"),
+    },
+    (table) => ({
+        tradeIdIndex: index("executions_trade_id_idx").on(table.tradeId),
+    })
+);
+
+// NotebookFolderTable - Organization for notebooks
+export const NotebookFolderTable = pgTable(
+    "notebook_folders",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        name: text("name").notNull(),
+        parentId: uuid("parent_id"), // For nested folders
+        color: text("color").default("#3B82F6"),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("notebook_folders_user_id_idx").on(table.userId),
+    })
+);
+
+// NotebookTable - Trading plans, loss recaps, and templates
+export const NotebookTable = pgTable(
+    "notebooks",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        title: text("title").notNull(),
+        type: text("type").notNull(), // "trading_plan" | "loss_recap" | "template" | "weekly_review"
+        content: jsonb("content"), // Rich text content
+        folderId: uuid("folder_id").references(() => NotebookFolderTable.id, { onDelete: "set null" }),
+        linkedTradeIds: jsonb("linked_trade_ids").$type<string[]>(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("notebooks_user_id_idx").on(table.userId),
+        typeIndex: index("notebooks_type_idx").on(table.type),
+        folderIdIndex: index("notebooks_folder_id_idx").on(table.folderId),
+    })
+);
+
+// AccountTable - Multi-account/broker support
+export const AccountTable = pgTable(
+    "accounts",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        name: text("name").notNull(),
+        broker: text("broker").notNull(), // "thinkorswim" | "ibkr" | "tradestation" | "sierra_chart" | etc.
+        accountType: text("account_type").default("live"), // "live" | "demo" | "funded" | "paper"
+        currency: text("currency").default("USD"),
+        initialBalance: text("initial_balance"),
+        isActive: boolean("is_active").default(true).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("accounts_user_id_idx").on(table.userId),
+    })
+);
+
+// ============================================
+// Progress Tracker Tables
+// ============================================
+
+// ProgressRuleTable - Rules for daily habit tracking
+export const ProgressRuleTable = pgTable(
+    "progress_rules",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        name: text("name").notNull(),
+        type: text("type").notNull(), // "MANUAL" | "AUTOMATED"
+        condition: jsonb("condition"), // For automated rules
+        targetDays: jsonb("target_days").$type<string[]>(), // ["Mon", "Tue", "Wed", "Thu", "Fri"]
+        isActive: boolean("is_active").default(true).notNull(),
+        order: integer("order").default(0).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("progress_rules_user_id_idx").on(table.userId),
+    })
+);
+
+// ProgressLogTable - Daily completion tracking
+export const ProgressLogTable = pgTable(
+    "progress_logs",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        ruleId: uuid("rule_id")
+            .notNull()
+            .references(() => ProgressRuleTable.id),
+        date: text("date").notNull(), // YYYY-MM-DD format
+        completed: boolean("completed").default(false).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdRuleIdDateIndex: index("progress_logs_user_rule_date_idx").on(
+            table.userId,
+            table.ruleId,
+            table.date
+        ),
+    })
+);
+
+// UserStreakTable - Track user's current streak
+export const UserStreakTable = pgTable(
+    "user_streaks",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        currentStreak: integer("current_streak").default(0).notNull(),
+        longestStreak: integer("longest_streak").default(0).notNull(),
+        lastCompletedDate: text("last_completed_date"), // YYYY-MM-DD
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("user_streaks_user_id_idx").on(table.userId),
+    })
+);
+
+// ============================================
+// Relations for new tables
+// ============================================
+
+export const TagRelations = relations(TagTable, ({ many }) => ({
+    tradeTags: many(TradeTagsTable),
+}));
+
+export const TradeTagRelations = relations(TradeTagsTable, ({ one }) => ({
+    trade: one(TradeTable, {
+        fields: [TradeTagsTable.tradeId],
+        references: [TradeTable.id],
+    }),
+    tag: one(TagTable, {
+        fields: [TradeTagsTable.tagId],
+        references: [TagTable.id],
+    }),
+}));
+
+export const ExecutionRelations = relations(ExecutionTable, ({ one }) => ({
+    trade: one(TradeTable, {
+        fields: [ExecutionTable.tradeId],
+        references: [TradeTable.id],
+    }),
+}));
+
+export const AccountRelations = relations(AccountTable, ({ one }) => ({
+    user: one(UserTable, {
+        fields: [AccountTable.userId],
+        references: [UserTable.id],
+    }),
+}));
+export const NotebookRelations = relations(NotebookTable, ({ one }) => ({
+    folder: one(NotebookFolderTable, {
+        fields: [NotebookTable.folderId],
+        references: [NotebookFolderTable.id],
+    }),
+}));
+
+export const NotebookFolderRelations = relations(NotebookFolderTable, ({ many, one }) => ({
+    notebooks: many(NotebookTable),
+    parent: one(NotebookFolderTable, {
+        fields: [NotebookFolderTable.parentId],
+        references: [NotebookFolderTable.id],
+        relationName: "folder_nesting",
+    }),
+    children: many(NotebookFolderTable, {
+        relationName: "folder_nesting",
+    }),
+}));
+
+// Progress Tracker Relations
+export const ProgressRuleRelations = relations(ProgressRuleTable, ({ many }) => ({
+    logs: many(ProgressLogTable),
+}));
+
+export const ProgressLogRelations = relations(ProgressLogTable, ({ one }) => ({
+    rule: one(ProgressRuleTable, {
+        fields: [ProgressLogTable.ruleId],
+        references: [ProgressRuleTable.id],
+    }),
+}));
+
+export const UserStreakRelations = relations(UserStreakTable, ({ one }) => ({
+    user: one(UserTable, {
+        fields: [UserStreakTable.userId],
+        references: [UserTable.id],
+    }),
+}));
+
+// ============================================
+// Backtesting Tables
+// ============================================
+
+// BacktestingSessionTable - Backtesting simulation sessions
+export const BacktestingSessionTable = pgTable(
+    "backtesting_sessions",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        userId: text("user_id")
+            .notNull()
+            .references(() => UserTable.id),
+        name: text("name").notNull(),
+        startDate: text("start_date").notNull(), // YYYY-MM-DD
+        endDate: text("end_date").notNull(), // YYYY-MM-DD
+        symbol: text("symbol").notNull(),
+        timeframe: text("timeframe").notNull(), // "1m" | "5m" | "1h" | "1d"
+        initialCapital: text("initial_capital").notNull(),
+        status: text("status").notNull(), // "in_progress" | "completed" | "cancelled"
+        result: jsonb("result"), // Final P&L, win rate, etc.
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        userIdIndex: index("backtesting_sessions_user_id_idx").on(table.userId),
+    })
+);
+
+// BacktestingTradeTable - Individual trades in backtesting session
+export const BacktestingTradeTable = pgTable(
+    "backtesting_trades",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        sessionId: uuid("session_id")
+            .notNull()
+            .references(() => BacktestingSessionTable.id, { onDelete: "cascade" }),
+        symbol: text("symbol").notNull(),
+        direction: text("direction").notNull(), // "LONG" | "SHORT"
+        entryPrice: text("entry_price").notNull(),
+        exitPrice: text("exit_price"),
+        quantity: text("quantity").notNull(),
+        entryDate: text("entry_date").notNull(),
+        exitDate: text("exit_date"),
+        pnl: text("pnl"),
+        notes: text("notes"),
+        strategyId: uuid("strategy_id").references(() => StrategyTable.id),
+        screenshotUrl: text("screenshot_url"),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        sessionIdIndex: index("backtesting_trades_session_id_idx").on(table.sessionId),
+    })
+);
+
+// ============================================
+// Backtesting Relations
+// ============================================
+
+export const BacktestingSessionRelations = relations(BacktestingSessionTable, ({ many }) => ({
+    trades: many(BacktestingTradeTable),
+}));
+
+export const BacktestingTradeRelations = relations(BacktestingTradeTable, ({ one }) => ({
+    session: one(BacktestingSessionTable, {
+        fields: [BacktestingTradeTable.sessionId],
+        references: [BacktestingSessionTable.id],
+    }),
+    strategy: one(StrategyTable, {
+        fields: [BacktestingTradeTable.strategyId],
+        references: [StrategyTable.id],
+    }),
+}));
+
+// ============================================
+// Mentor Mode Tables
+// ============================================
+
+// MentorConnectionTable - Mentor-mentee relationships
+export const MentorConnectionTable = pgTable(
+    "mentor_connections",
+    {
+        id: uuid("id").primaryKey().defaultRandom(),
+        mentorId: text("mentor_id")
+            .notNull()
+            .references(() => UserTable.id),
+        menteeId: text("mentee_id")
+            .notNull()
+            .references(() => UserTable.id),
+        status: text("status").notNull(), // "pending" | "accepted" | "declined" | "cancelled"
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .defaultNow()
+            .notNull(),
+    },
+    (table) => ({
+        mentorIdIndex: index("mentor_connections_mentor_id_idx").on(table.mentorId),
+        menteeIdIndex: index("mentor_connections_mentee_id_idx").on(table.menteeId),
+    })
+);
+
+// ============================================
+// Mentor Relations
+// ============================================
+
+export const MentorConnectionRelations = relations(MentorConnectionTable, ({ one }) => ({
+    mentor: one(UserTable, {
+        fields: [MentorConnectionTable.mentorId],
+        references: [UserTable.id],
+    }),
+    mentee: one(UserTable, {
+        fields: [MentorConnectionTable.menteeId],
+        references: [UserTable.id],
+    }),
+}));

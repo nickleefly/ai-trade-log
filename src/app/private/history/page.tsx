@@ -7,25 +7,25 @@ import { useEffect, useState } from "react";
 import { getCapital } from "@/server/actions/user";
 import { OpenTradesTable } from "@/components/history/OpenTradesTable";
 import { CloseTradesTable } from "@/components/history/CloseTradesTable";
-
-
+import { useAuth } from "@clerk/nextjs";
+import { useFilteredTrades } from "@/hooks/useFilteredTrades";
+import { DayMetricsBar } from "@/components/DayMetricsBar";
+import Filtering from "@/components/Filtering";
 
 export default function Page() {
     const [sortedTrades, setSortedTrades] = useState<Trades[]>([]);
     const [total, setTotal] = useState<number>(0);
     const [startCapital, setStartCapital] = useState<string | null>(null);
 
-    const trades = useAppSelector((state) => state.tradeRecords.listOfTrades);
-    const filteredTrades = useAppSelector(
-        (state) => state.history.filteredTrades
-    );
+    const { userId } = useAuth();
+    const tradeRecords = useFilteredTrades();
 
     const sortBy = useAppSelector((state) => state.history.sortBy);
     const timeframe = useAppSelector((state) => state.history.timeframe);
 
     const activeTab = useAppSelector((state) => state.history.activeTab);
 
-    const tradesToSort = filteredTrades || trades || [];
+    const tradesToSort = tradeRecords;
 
     useEffect(() => {
         async function fetchData() {
@@ -52,7 +52,7 @@ export default function Page() {
         );
         setSortedTrades(result);
         setTotal(reducedTotal);
-    }, [sortBy, timeframe, trades, filteredTrades]);
+    }, [sortBy, timeframe, tradeRecords]);
 
 
 
@@ -75,29 +75,29 @@ export default function Page() {
     }
 
     return (
+        <div className="flex flex-col gap-6">
+            <DayMetricsBar trades={tradeRecords} />
+            <div>
+                {activeTab === "openTrades" && (
+                    openTrades.length > 0 ? (
+                        <OpenTradesTable trades={openTrades} startCapital={startCapital} />
+                    ) : (
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-zinc-500">
+                            No open trades found - complete some trades to see history
+                        </div>
+                    )
+                )}
 
-        <div>
-            {activeTab === "openTrades" && (
-                openTrades.length > 0 ? (
-                    <OpenTradesTable trades={openTrades} startCapital={startCapital} />
-                ) : (
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-zinc-500">
-                        No open trades found - complete some trades to see history
-                    </div>
-                )
-            )}
-
-            {activeTab === "closedTrades" && (
-                closedTrades.length > 0 ? (
-                    <CloseTradesTable trades={closedTrades} startCapital={startCapital} total={total} />
-                ) : (
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-zinc-500">
-                        No closed trades found - complete some trades to see history
-                    </div>
-                )
-            )}
+                {activeTab === "closedTrades" && (
+                    closedTrades.length > 0 ? (
+                        <CloseTradesTable trades={closedTrades} startCapital={startCapital} total={total} />
+                    ) : (
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-zinc-500">
+                            No closed trades found - complete some trades to see history
+                        </div>
+                    )
+                )}
+            </div>
         </div>
-
-
     );
 }
